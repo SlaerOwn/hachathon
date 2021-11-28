@@ -17,7 +17,7 @@ function state_5() {
     plusTrigger.addComponent(shape1)
     shape1.visible = false
     plusTrigger.getComponent(BoxShape).withCollisions = false
-    plusTrigger.addComponent(new Transform({ position: new Vector3(10.8, 2, 12.6), scale: new Vector3(0.2, 2, 1) }))
+    plusTrigger.addComponent(new Transform({ position: new Vector3(10.8, 2, 11.63), scale: new Vector3(0.2, 2, 1) }))
     let trigger11Box = new utils.TriggerBoxShape(new Vector3(0.2, 2, 1))
     plusTrigger.addComponent(
       new utils.TriggerComponent(
@@ -45,7 +45,7 @@ function state_5() {
     minusTrigger.addComponent(shape2)
     shape2.visible = false
     minusTrigger.getComponent(BoxShape).withCollisions = false
-    minusTrigger.addComponent(new Transform({ position: new Vector3(10.1, 2, 12.5), scale: new Vector3(0.2, 2, 1) }))
+    minusTrigger.addComponent(new Transform({ position: new Vector3(10.1, 2, 11.63), scale: new Vector3(0.2, 2, 1) }))
     let trigger2Box = new utils.TriggerBoxShape(new Vector3(0.2, 2, 1))
     minusTrigger.addComponent(
       new utils.TriggerComponent(

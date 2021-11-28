@@ -30,19 +30,26 @@ function initializeTips() {
             case 5:
                 text.value = "You need to walk several times around the partition in the center of the room."
                 break
-            case 6:
+            case 6: 
                 text.value = "Put the cube on the table"
                 break
         }
     })
 }
 
+// intitial camera mode
+log("Camera mode: ", Camera.instance.cameraMode)
+
+// check for changes
+onCameraModeChangedObservable.add(({ cameraMode }) => {
+  log("Camera mode changed:", cameraMode)
+})
+
+
 function setRoom(newRoom: number) {
     currentRoom = newRoom
     hideTip()
 }
-
-
 
 function hideTip() {
     text.value = ""

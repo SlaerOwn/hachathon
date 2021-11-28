@@ -19,12 +19,15 @@ const room_3_apendix2 = spawnInvisibleEntity(new GLTFShape("models/room_3_apendi
 const room_4_1 = spawnInvisibleEntity(new GLTFShape("models/room_4.glb"), 8, 1, 7)
 const room_4_2 = spawnInvisibleEntity(new GLTFShape("models/room_4.glb"), 8, 1, 14.5)
 
-const room_5_1 = spawnInvisibleEntity(new GLTFShape("models/room_5_1.glb"), 10.93, 1, 11.1 )
-const room_5_2 = spawnInvisibleEntity(new GLTFShape("models/room_5_2.glb"), 8, 1, 11.74 )
-const room_5_3 = spawnInvisibleEntity(new GLTFShape("models/room_5_3.glb"), 9.93, 1, 12.40 )
-const room_5_4 = spawnInvisibleEntity(new GLTFShape("models/room_5_4.glb"), 8.19, 1, 20.15 )
+const room_5_1 = spawnInvisibleEntity(new GLTFShape("models/room_5_1.glb"), 8, 1, 19.92)
+const room_5_2 = spawnInvisibleEntity(new GLTFShape("models/room_5_2.glb"), 8, 1, 18.08 )
+const room_5_3 = spawnInvisibleEntity(new GLTFShape("models/room_5_3.glb"), 11.5, 1, 10.7 )
+const room_5_4 = spawnInvisibleEntity(new GLTFShape("models/room_5_4.glb"), 8, 0, 19.92 )
 
-const room_6 = spawnInvisibleEntity(new GLTFShape("models/room_6.glb"), 7.71, 1, 15.67 )
+const room_6 = spawnInvisibleEntity(new GLTFShape("models/room_6.glb"), 9.275, 0.99, 14 )
+
+const strelka_1 = spawnInvisibleEntity(new GLTFShape("models/strelka.glb"), 8, 0, 8 )
+const strelka_2 = spawnInvisibleEntity(new GLTFShape("models/strelka.glb"), 8, 0, 8 )
 
 const cube = new Entity()
 cube.addComponent(new BoxShape())
@@ -36,29 +39,22 @@ cube.getComponent(BoxShape).visible = false
 
 const cubeTrigger = new Entity()
 cubeTrigger.addComponent(new BoxShape())
-cubeTrigger.addComponent(new Transform({ position: new Vector3(8.8, 1.75, 6.8) }))
+cubeTrigger.addComponent(new Transform({ position: new Vector3(10.3, 1.75, 5.3) }))
 engine.addEntity(cubeTrigger)
 cubeTrigger.getComponent(Transform).scale.setAll(0.3)
 cubeTrigger.getComponent(BoxShape).visible = false
-// cubeTrigger.getComponent(Material).albedoColor = Color4.Black()
+cubeTrigger.getComponent(BoxShape).withCollisions = false
 
-const cubeLast = new Entity()
-cubeLast.addComponent(new BoxShape())
-cubeLast.addComponent(new Transform({ position: new Vector3(8.8, 1.75, 6.8) }))
-engine.addEntity(cubeLast)
-cubeLast.getComponent(Transform).scale.setAll(0.3)
-cubeLast.getComponent(BoxShape).visible = false
 
 cubeTrigger.addComponent(new OnPointerDown(
   () => {
-    cubeLast.getComponent(BoxShape).visible = true
+    invisibleOn(room_6)
     invisibleOff(room_1)
     room_1.getComponent(Transform).position.y = 0
+    movePlayerTo(new Vector3(8, 0, 8))
     door1.getComponent(Animator).getClip("State1").play()
     door1.removeComponent(OnPointerDown)
-    invisibleOn(room_6)
-    movePlayerTo(new Vector3(8, 0, 8))
-    cubeTrigger.removeComponent(OnPointerDown)
+    cubeTrigger.getComponent(BoxShape).visible = false
   },
   {
     button: ActionButton.POINTER,
