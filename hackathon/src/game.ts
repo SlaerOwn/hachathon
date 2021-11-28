@@ -1,16 +1,17 @@
 import * as utils from '@dcl/ecs-scene-utils'
 import { movePlayerTo } from '@decentraland/RestrictedActions'
-import { spawnEntity, spawnDoor, spawnInvisibleEntity, spawnInvisibleDoor } from "./functions"
+import { spawnEntity, spawnDoor, spawnInvisibleEntity, spawnInvisibleDoor, invisibleOff, invisibleOn } from "./functions"
 import { state_1, state_1trigger } from "./states/state_1"
 import { state_2 } from "./states/state_2"
 import { state_3 } from './states/state_3'
 import { state_3_respawn_d3 } from './states/state_3_respawn_d3'
 import { state_4 } from './states/state_4'
 import { minus, plus } from './states/state_5'
+import{initializeTips, setRoom} from "./tips"
 
 let state = 0
 
-const room_1 = spawnEntity(new GLTFShape("models/room_1.glb"), 8, 1.07, 8)
+const room_1 = spawnEntity(new GLTFShape("models/room_1.glb"), 8, 0, 8)
 const room_2 = spawnInvisibleEntity(new GLTFShape("models/room_2.glb"), 8, 1, 8)
 const room_3 = spawnInvisibleEntity(new GLTFShape("models/room_3.glb"), 8, 1, 8)
 const room_3_apendix = spawnInvisibleEntity(new GLTFShape("models/room_3_apendix.glb"), 8, 1, 8)
@@ -21,16 +22,52 @@ const room_4_2 = spawnInvisibleEntity(new GLTFShape("models/room_4.glb"), 8, 1, 
 const room_5_1 = spawnInvisibleEntity(new GLTFShape("models/room_5_1.glb"), 10.93, 1, 11.1 )
 const room_5_2 = spawnInvisibleEntity(new GLTFShape("models/room_5_2.glb"), 8, 1, 11.74 )
 const room_5_3 = spawnInvisibleEntity(new GLTFShape("models/room_5_3.glb"), 9.93, 1, 12.40 )
-const room_5_4 = spawnInvisibleEntity(new GLTFShape("models/room_5_4.glb"), 8, 1, 20.83 )
+const room_5_4 = spawnInvisibleEntity(new GLTFShape("models/room_5_4.glb"), 8.19, 1, 20.15 )
 
-
+const room_6 = spawnInvisibleEntity(new GLTFShape("models/room_6.glb"), 7.71, 1, 15.67 )
 
 const cube = new Entity()
 cube.addComponent(new BoxShape())
-cube.addComponent(new Transform({ position: new Vector3(2.7, 2.2, 11.6) }))
+cube.addComponent(new Transform({ position: new Vector3(2.7, 2.3, 11.6) }))
 engine.addEntity(cube)
 cube.getComponent(Transform).scale.setAll(0.3)
 cube.getComponent(BoxShape).visible = false
+
+
+const cubeTrigger = new Entity()
+cubeTrigger.addComponent(new BoxShape())
+cubeTrigger.addComponent(new Transform({ position: new Vector3(8.8, 1.75, 6.8) }))
+engine.addEntity(cubeTrigger)
+cubeTrigger.getComponent(Transform).scale.setAll(0.3)
+cubeTrigger.getComponent(BoxShape).visible = false
+// cubeTrigger.getComponent(Material).albedoColor = Color4.Black()
+
+const cubeLast = new Entity()
+cubeLast.addComponent(new BoxShape())
+cubeLast.addComponent(new Transform({ position: new Vector3(8.8, 1.75, 6.8) }))
+engine.addEntity(cubeLast)
+cubeLast.getComponent(Transform).scale.setAll(0.3)
+cubeLast.getComponent(BoxShape).visible = false
+
+cubeTrigger.addComponent(new OnPointerDown(
+  () => {
+    cubeLast.getComponent(BoxShape).visible = true
+    invisibleOff(room_1)
+    room_1.getComponent(Transform).position.y = 0
+    door1.getComponent(Animator).getClip("State1").play()
+    door1.removeComponent(OnPointerDown)
+    invisibleOn(room_6)
+    movePlayerTo(new Vector3(8, 0, 8))
+    cubeTrigger.removeComponent(OnPointerDown)
+  },
+  {
+    button: ActionButton.POINTER,
+    distance: 5,
+    showFeedback: true,
+    hoverText: "Place a cube",
+  }
+));
+
 
 const door1Trigger = new Entity()
 const shape = new BoxShape()
@@ -57,7 +94,7 @@ door1Trigger.addComponent(
 engine.addEntity(door1Trigger)
 
 
-const door1 = spawnDoor(8, 1.07, 9.01)
+const door1 = spawnDoor(8, 1.2, 9.01)
 const door2 = spawnInvisibleDoor(9, 1, 11.6315, Quaternion.Euler(0, -90, 0))
 const door3 = spawnInvisibleDoor(10.369, 1, 14.25)
 const door4 = spawnInvisibleDoor(11.71, 1, 11.6315, Quaternion.Euler(0, -90, 0))
@@ -126,7 +163,7 @@ door4.addComponent(new OnPointerDown(
   },
   {
     button: ActionButton.POINTER,
-    distance: 5,
+    distance: 2,
     showFeedback: true,
     hoverText: "Open/close door",
   }
@@ -139,7 +176,7 @@ door5.addComponent(new OnPointerDown(
   },
   {
     button: ActionButton.POINTER,
-    distance: 5,
+    distance: 2,
     showFeedback: true,
     hoverText: "Open/close door",
   }
@@ -152,7 +189,7 @@ door6.addComponent(new OnPointerDown(
   },
   {
     button: ActionButton.POINTER,
-    distance: 5,
+    distance: 2,
     showFeedback: true,
     hoverText: "Open/close door",
   }
@@ -162,31 +199,30 @@ door6.addComponent(new OnPointerDown(
 
 export { cube }
 
+const canvas = new UICanvas()
+const text = new UIText(canvas)
+text.value = "Please, use FIRST PERSON view!"
+if(Camera.instance.cameraMode == CameraMode.ThirdPerson){
+  text.visible = true
+}else{
+  text.visible = false
+}
+text.color = Color4.Red()
+text.fontSize = 20
 
-
-
-// const animator = new Animator()
-
-// door.addComponent(animator)
-
-// const open = new AnimationState("State1")
-
-// open.looping = false
-
-// animator.addClip(open)
-
-// const close = new AnimationState("State2")
-
-// close.looping = false
-
-// animator.addClip(close)
-
-// engine.addEntity(door)
-
-// let opened = false
+onCameraModeChangedObservable.add(({ cameraMode }) => {
+  if(cameraMode == CameraMode.ThirdPerson)
+    {
+      text.visible = true
+    }else{
+      text.visible = false
+    }
+})
 
 Input.instance.subscribe("BUTTON_DOWN", ActionButton.SECONDARY, false, (e) => {
   movePlayerTo(new Vector3(8, 100, 8))
 })
 
-export {room_5_1, room_5_2, room_5_3, room_5_4}
+initializeTips()
+
+export {door5, room_4_1, room_5_1, room_5_2, room_5_3, room_5_4, room_6, cubeTrigger}

@@ -2,6 +2,7 @@ import * as utils from '@dcl/ecs-scene-utils'
 import { movePlayerTo } from '@decentraland/RestrictedActions'
 import { invisibleOff, invisibleOn } from "./../functions"
 import { state_5 } from './state_5'
+import{setRoom} from "./../tips"
 
 let door4opened = false
 let door2opened = true
@@ -122,6 +123,7 @@ function state_4(door_2: Entity, door_3: Entity, door_4: Entity, door_5: Entity,
                         log("DESPAWN")
                         invisibleOn(room_5_1_)
                         state_5()
+                        setRoom(5)
                         invisibleOff(room_4_)
                         spawned = false
                     }

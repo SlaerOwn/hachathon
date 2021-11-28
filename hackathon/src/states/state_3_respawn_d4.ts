@@ -2,6 +2,7 @@ import * as utils from '@dcl/ecs-scene-utils'
 import { movePlayerTo } from '@decentraland/RestrictedActions'
 import { invisibleOff, invisibleOn } from "./../functions"
 import {state_3_respawn_d2} from "./state_3_respawn_d2"
+import{setRoom} from "./../tips"
 
 let opened = false
 let door1opened = true
@@ -20,7 +21,9 @@ function respawn(door_1: Entity, door_2: Entity, door_3: Entity, room_3: Entity,
     engine.removeEntity(trigger)
     invisibleOn(door_3)
 
+
     door_1.getComponent(Animator).getClip("State1").play()
+    setRoom(4)
 
 
     const playerX = Camera.instance.position.x
